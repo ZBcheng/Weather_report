@@ -1,7 +1,7 @@
 import time, datetime
 import requests
 from twilio.rest import Client
-
+from analyse import Set_data
 
 class Weather:
 
@@ -24,15 +24,20 @@ class Weather:
 		r.encoding = 'utf-8'  # 编码
 
 		# r.json()['weatherinfo']['city']
-		list = ["Weather in Xi'an:", "Temperature:  " + r.json()['weatherinfo']['temp'],
-		        "Humidity:  " + r.json()['weatherinfo']['SD']]
+
+		temperature = r.json()['weatherinfo']['temp']
+		humidity = r.json()['weatherinfo']['SD']
+		list = ["Weather in Xi'an:", "Temperature:  " + temperature,
+		        "Humidity:  " + humidity]
 
 		data = str(list[0] + '\n' + list[1] + '\n' + list[2])
 		info = 'Good morning Bee!\n' + data
 
 		print(info)
 
-		return info
+		total = [info, temperature, humidity.split('%')[0]]
+
+		return total
 
 
 	# 发送短信
@@ -43,10 +48,13 @@ class Weather:
 		client = Client(account_sid, auth_token)
 
 		message = client.messages.create(
-			body = self.__getInfo(),  # Xi'an city_id
+			body = self.__getInfo()[0],
 			from_ = '(239) 237-3586',
 			to = self.__phone_number
 		)
+
+		info = Set_data(self.__getInfo()[1], self.__getInfo()[2])
+		info.write()
 
 		print(message.sid)
 
@@ -71,9 +79,4 @@ class Weather:
 		print('starting')
 
 
-if __name__ == '__main__':
-
-	xian = Weather('+8615686442131', 101110101, 2145)
-
-	xian.send()
 
