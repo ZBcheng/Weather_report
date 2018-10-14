@@ -1,7 +1,8 @@
 import time, datetime
 import requests
 from twilio.rest import Client
-from analyse import Set_data
+from set import Set_data
+from analyse import Analyse
 
 class Weather:
 
@@ -33,7 +34,6 @@ class Weather:
 		data = str(list[0] + '\n' + list[1] + '\n' + list[2])
 		info = 'Good morning Bee!\n' + data
 
-		print(info)
 
 		total = [info, temperature, humidity.split('%')[0]]
 
@@ -41,7 +41,7 @@ class Weather:
 
 
 	# 发送短信
-	def send(self):
+	def __send(self):
 		self.__setTime()
 		account_sid = 'AC7c4003f4b37c35d2e4249984df784b69'
 		auth_token = '6345546fae4ad92e602570250760c0fe'
@@ -55,9 +55,16 @@ class Weather:
 
 		info = Set_data(self.__getInfo()[1], self.__getInfo()[2])
 		info.write()
+		x = Analyse('/Python/Code/data.xls')
+		x.createPic()
+		time.sleep(70)
 
 		print(message.sid)
 
+
+	def start(self):
+		while(True):
+			self.__send()
 
 	# 设置获取时间
 	def __setTime(self):
