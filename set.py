@@ -15,13 +15,13 @@ class SetData(object):
 
 		sheets = data.sheets()
 		if name == 'date':
-			sheet_1_by_name = data.sheet_by_name(u'date')
+			sheet_by_name = data.sheet_by_name(u'date')
 		elif name == 'temperature':
-			sheet_1_by_name = data.sheet_by_name(u'temperature')
+			sheet_by_name = data.sheet_by_name(u'temperature')
 		elif name == 'humidity':
-			sheet_1_by_name = data.sheet_by_name(u'humidity')
+			sheet_by_name = data.sheet_by_name(u'humidity')
 
-		return sheet_1_by_name
+		return sheet_by_name
 
 	def write(self):
 
@@ -62,19 +62,37 @@ class SetData(object):
 
 	def _getTime(self):
 		raw_day = str(datetime.datetime.now().strftime('%D')).split('/')
-		day = int(raw_day[0] + raw_day[1])
+		day = int(raw_day[1])
 
 		return day
 
 	def _getLength(self):
+		assert self._lengthCheck() == True, \
+			'length error, check data.xls'
+
 		#   文件路径
 		path = '/Python/Code/data.xls'
 		data = xlrd.open_workbook(path)
 
 		#   读入Excel
-		sheet_1_by_name = data.sheet_by_name(u'date')
-		length = sheet_1_by_name.nrows
+		sheet_date = data.sheet_by_name(u'date')
+		length = sheet_date.nrows
 
 		return length
 
+	def _lengthCheck(self):
+		path = path = '/Python/Code/data.xls'
+		data = xlrd.open_workbook(path)
 
+		#   读入Excel
+		sheet_date = data.sheet_by_name(u'date')
+		sheet_temperature = data.sheet_by_name(u'temperature')
+		sheet_humidity = data.sheet_by_name(u'humidity')
+
+		length_date = sheet_date.nrows
+		length_temperature = sheet_temperature.nrows
+		length_humidity = sheet_humidity.nrows
+
+		if length_date == length_temperature == length_humidity:
+			return True
+		else: return False

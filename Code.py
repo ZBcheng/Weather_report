@@ -43,6 +43,7 @@ class Weather(object):
 	# 发送短信
 	def _send(self):
 		self._setTime()
+
 		account_sid = 'AC7c4003f4b37c35d2e4249984df784b69'
 		auth_token = '6345546fae4ad92e602570250760c0fe'
 		client = Client(account_sid, auth_token)
@@ -59,7 +60,7 @@ class Weather(object):
 		x.createPic()
 		time.sleep(70)
 
-		print(message.sid)
+		#print(message.sid)
 
 
 	def start(self):

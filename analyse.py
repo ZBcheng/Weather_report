@@ -34,8 +34,20 @@ class Analyse(object):
 
 	def createPic(self):
 		self._createList()
+		date = []
+		temperature = []
+		humidity = []
+
 		for i in range(0, len(self._list_date)):
-			plt.scatter(self._list_date[i], self._list_temperature[i], color='red')
-			plt.scatter(self._list_date[i], self._list_humidity[i], color='blue')
+			date.append(self._list_date[i][0])
+			temperature.append(self._list_temperature[i][0])
+			humidity.append(self._list_humidity[i][0])
+
+		plt.xlabel('Date')
+
+
+		plt.plot(date, temperature, color='b', label='Temperature')  #   添加日期与温度关系
+		plt.plot(date, humidity, color='r', label='Humidity')     #   添加日期与湿度关系
+		plt.legend(loc='upper left')
 		plt.show()
 
