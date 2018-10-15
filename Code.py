@@ -1,10 +1,10 @@
 import time, datetime
 import requests
 from twilio.rest import Client
-from set import Set_data
+from set import SetData
 from analyse import Analyse
 
-class Weather:
+class Weather(object):
 
 	def __init__(self, phone_number, city_id, start_time):
 
@@ -13,15 +13,15 @@ class Weather:
 		assert start_time < 2400, \
 			'must set a time before 24:00'
 
-		self.__phone_number = phone_number
-		self.__city_id = city_id
-		self.__start_time = start_time
+		self._phone_number = phone_number
+		self._city_id = city_id
+		self._start_time = start_time
 
 
 	# 输入city_id，发送请求
-	def __getInfo(self):
+	def _getInfo(self):
 
-		r = requests.get('http://www.weather.com.cn/data/sk/' + str(self.__city_id) + '.html')
+		r = requests.get('http://www.weather.com.cn/data/sk/' + str(self._city_id) + '.html')
 		r.encoding = 'utf-8'  # 编码
 
 		# r.json()['weatherinfo']['city']
@@ -41,19 +41,19 @@ class Weather:
 
 
 	# 发送短信
-	def __send(self):
-		self.__setTime()
+	def _send(self):
+		self._setTime()
 		account_sid = 'AC7c4003f4b37c35d2e4249984df784b69'
 		auth_token = '6345546fae4ad92e602570250760c0fe'
 		client = Client(account_sid, auth_token)
 
 		message = client.messages.create(
-			body = self.__getInfo()[0],
+			body = self._getInfo()[0],
 			from_ = '(239) 237-3586',
-			to = self.__phone_number
+			to = self._phone_number
 		)
 
-		info = Set_data(self.__getInfo()[1], self.__getInfo()[2])
+		info = SetData(self._getInfo()[1], self._getInfo()[2])
 		info.write()
 		x = Analyse('/Python/Code/data.xls')
 		x.createPic()
@@ -64,10 +64,10 @@ class Weather:
 
 	def start(self):
 		while(True):
-			self.__send()
+			self._send()
 
 	# 设置获取时间
-	def __setTime(self):
+	def _setTime(self):
 
 		# 获取当前小时与分钟
 		now = str(datetime.datetime.now().strftime('%H') + datetime.datetime.now().strftime('%M'))
@@ -78,7 +78,7 @@ class Weather:
 		print('Program not starting yet...')
 
 		# 比较设定时间与当前时间
-		while cur != self.__start_time:
+		while cur != self._start_time:
 			now = str(datetime.datetime.now().strftime('%H') + datetime.datetime.now().strftime('%M'))
 			cur = int(now)
 			time.sleep(1)

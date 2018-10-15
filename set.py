@@ -3,13 +3,13 @@ import xlrd
 import datetime
 
 
-class Set_data:
+class SetData(object):
 
 	def __init__(self, temperature, humidity):
-		self.__temperature = temperature
-		self.__humidity = humidity
+		self._temperature = temperature
+		self._humidity = humidity
 
-	def __open(self, name):
+	def _open(self, name):
 		path = '/Python/Code/data.xls'
 		data = xlrd.open_workbook(path)
 
@@ -25,16 +25,16 @@ class Set_data:
 
 	def write(self):
 
-		i = self.__getLength()
+		i = self._getLength()
 
 		date = []
 		temperature = []
 		humidity = []
 
 		for j in range(0, i):
-			date.append(self.__open('date').row_values(j)[0])
-			temperature.append(self.__open('temperature').row_values(j)[0])
-			humidity.append(self.__open('humidity').row_values(j)[0])
+			date.append(self._open('date').row_values(j)[0])
+			temperature.append(self._open('temperature').row_values(j)[0])
+			humidity.append(self._open('humidity').row_values(j)[0])
 
 		#   创建Excel工作表
 		workbook = xlwt.Workbook(encoding='ascii')
@@ -47,25 +47,26 @@ class Set_data:
 		for j in range(0, len(date)):
 			worksheet_date.write(j, 0, date[j])
 
-		worksheet_date.write(i, 0, self.__getTime())
+		worksheet_date.write(i, 0, self._getTime())
 
 		for j in range(0, len(temperature)):
 			worksheet_temperature.write(j, 0, temperature[j])
 
-		worksheet_temperature.write(i, 0, self.__temperature)
+		worksheet_temperature.write(i, 0, self._temperature)
 
 		for j in range(0, len(humidity)):
 			worksheet_humidity.write(j, 0, humidity[j])
 
-		worksheet_humidity.write(i, 0, self.__humidity)
+		worksheet_humidity.write(i, 0, self._humidity)
 		workbook.save('data.xls')
 
-	def __getTime(self):
-		day = str(datetime.datetime.now().strftime('%D'))
+	def _getTime(self):
+		raw_day = str(datetime.datetime.now().strftime('%D')).split('/')
+		day = int(raw_day[0] + raw_day[1])
 
 		return day
 
-	def __getLength(self):
+	def _getLength(self):
 		#   文件路径
 		path = '/Python/Code/data.xls'
 		data = xlrd.open_workbook(path)

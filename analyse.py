@@ -1,17 +1,16 @@
 import xlrd
 import matplotlib.pyplot as plt
 
-class Analyse:
+class Analyse(object):
 	def __init__(self, path):
-		self.__path = path
+		self._path = path
+		self._list_date = []
+		self._list_temperature = []
+		self._list_humidity = []
 
-		self.__list_date = []
-		self.__list_temperature = []
-		self.__list_humidity = []
 
-
-	def __createList(self):
-		data = xlrd.open_workbook(self.__path)
+	def _createList(self):
+		data = xlrd.open_workbook(self._path)
 
 		#   读入Excel
 		sheet_date = data.sheet_by_name(u'date')
@@ -23,17 +22,20 @@ class Analyse:
 		length_humidity = sheet_humidity.nrows
 
 		for i in range(0, length_date):
-			self.__list_date.append(sheet_date.row_values(i))
+			self._list_date.append(sheet_date.row_values(i))
 
 		for i in range(0, length_temperature):
-			self.__list_temperature.append(sheet_temperature.row_values(i))
+			self._list_temperature.append(sheet_temperature.row_values(i))
 
 		for i in range(0, length_humidity):
-			self.__list_humidity.append(sheet_humidity.row_values(i))
+			self._list_humidity.append(sheet_humidity.row_values(i))
 
 		return length_date
 
 	def createPic(self):
-		self.__createList()
-		plt.scatter(self.__list_date, self.__list_temperature)
+		self._createList()
+		for i in range(0, len(self._list_date)):
+			plt.scatter(self._list_date[i], self._list_temperature[i], color='red')
+			plt.scatter(self._list_date[i], self._list_humidity[i], color='blue')
 		plt.show()
+
