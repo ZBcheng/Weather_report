@@ -5,69 +5,69 @@ import datetime
 
 class SetData(object):
 
-	def __init__(self, temperature, humidity):
-		self._temperature = temperature
-		self._humidity = humidity
+	def __init__(self, temperature_low, temperature_high):
+		self.__temperature_low = temperature_low
+		self.__temperature_high = temperature_high
 
-	def _open(self, name):
+	def __open(self, name):
 		path = '/Python/Code/data.xls'
 		data = xlrd.open_workbook(path)
 
 		sheets = data.sheets()
 		if name == 'date':
 			sheet_by_name = data.sheet_by_name(u'date')
-		elif name == 'temperature':
-			sheet_by_name = data.sheet_by_name(u'temperature')
-		elif name == 'humidity':
-			sheet_by_name = data.sheet_by_name(u'humidity')
+		elif name == 'temperature_low':
+			sheet_by_name = data.sheet_by_name(u'temperature_low')
+		elif name == 'temperature_high':
+			sheet_by_name = data.sheet_by_name(u'temperature_high')
 
 		return sheet_by_name
 
 	def write(self):
 
-		i = self._getLength()
+		i = self.__getLength()
 
 		date = []
-		temperature = []
-		humidity = []
+		temperature_low = []
+		temperature_high = []
 
 		for j in range(0, i):
-			date.append(self._open('date').row_values(j)[0])
-			temperature.append(self._open('temperature').row_values(j)[0])
-			humidity.append(self._open('humidity').row_values(j)[0])
+			date.append(self.__open('date').row_values(j)[0])
+			temperature_low.append(self.__open('temperature_low').row_values(j)[0])
+			temperature_high.append(self.__open('temperature_high').row_values(j)[0])
 
 		#   创建Excel工作表
 		workbook = xlwt.Workbook(encoding='ascii')
 		worksheet_date = workbook.add_sheet('date')
-		worksheet_temperature = workbook.add_sheet('temperature')
-		worksheet_humidity = workbook.add_sheet('humidity')
+		worksheet_temperature_low = workbook.add_sheet('temperature_low')
+		worksheet_temperature_high = workbook.add_sheet('temperature_high')
 
 		workbook.save('data.xls')
 
 		for j in range(0, len(date)):
 			worksheet_date.write(j, 0, date[j])
 
-		worksheet_date.write(i, 0, self._getTime())
+		worksheet_date.write(i, 0, self.__getTime())
 
-		for j in range(0, len(temperature)):
-			worksheet_temperature.write(j, 0, temperature[j])
+		for j in range(0, len(temperature_low)):
+			worksheet_temperature_low.write(j, 0, temperature_low[j])
 
-		worksheet_temperature.write(i, 0, self._temperature)
+		worksheet_temperature_low.write(i, 0, self.__temperature_low)
 
-		for j in range(0, len(humidity)):
-			worksheet_humidity.write(j, 0, humidity[j])
+		for j in range(0, len(temperature_high)):
+			worksheet_temperature_high.write(j, 0, temperature_high[j])
 
-		worksheet_humidity.write(i, 0, self._humidity)
+		worksheet_temperature_high.write(i, 0, self.__temperature_high)
 		workbook.save('data.xls')
 
-	def _getTime(self):
+	def __getTime(self):
 		raw_day = str(datetime.datetime.now().strftime('%D')).split('/')
 		day = int(raw_day[1])
 
 		return day
 
-	def _getLength(self):
-		assert self._lengthCheck() == True, \
+	def __getLength(self):
+		assert self.__lengthCheck() == True, \
 			'length error, check data.xls'
 
 		#   文件路径
@@ -82,19 +82,19 @@ class SetData(object):
 
 
 	#   检查excel长度是否一致
-	def _lengthCheck(self):
+	def __lengthCheck(self):
 		path = path = '/Python/Code/data.xls'
 		data = xlrd.open_workbook(path)
 
 		#   读入Excel
 		sheet_date = data.sheet_by_name(u'date')
-		sheet_temperature = data.sheet_by_name(u'temperature')
-		sheet_humidity = data.sheet_by_name(u'humidity')
+		sheet_temperature_low = data.sheet_by_name(u'temperature_low')
+		sheet_temperature_high = data.sheet_by_name(u'temperature_high')
 
 		length_date = sheet_date.nrows
-		length_temperature = sheet_temperature.nrows
-		length_humidity = sheet_humidity.nrows
+		length_temperature_low = sheet_temperature_low.nrows
+		length_temperature_high = sheet_temperature_high.nrows
 
-		if length_date == length_temperature == length_humidity:
+		if length_date == length_temperature_low == length_temperature_high:
 			return True
 		else: return False

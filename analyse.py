@@ -3,52 +3,54 @@ import matplotlib.pyplot as plt
 
 class Analyse(object):
 	def __init__(self, path):
-		self._path = path
-		self._list_date = []
-		self._list_temperature = []
-		self._list_humidity = []
+		self.__path = path
+		self.__list_date = []
+		self.__list_temperature_low = []
+		self.__list_temperature_high = []
 
 
-	def _createList(self):
-		data = xlrd.open_workbook(self._path)
+	def __createList(self):
+		data = xlrd.open_workbook(self.__path)
 
 		#   读入Excel
 		sheet_date = data.sheet_by_name(u'date')
-		sheet_temperature = data.sheet_by_name(u'temperature')
-		sheet_humidity = data.sheet_by_name(u'humidity')
+		sheet_temperature_low = data.sheet_by_name(u'temperature_low')
+		sheet_temperature_high = data.sheet_by_name(u'temperature_high')
 
 		length_date = sheet_date.nrows
-		length_temperature = sheet_temperature.nrows
-		length_humidity = sheet_humidity.nrows
+		length_temperature_low = sheet_temperature_low.nrows
+		length_temperature_high = sheet_temperature_high.nrows
 
 		for i in range(0, length_date):
-			self._list_date.append(sheet_date.row_values(i))
+			self.__list_date.append(sheet_date.row_values(i))
 
-		for i in range(0, length_temperature):
-			self._list_temperature.append(sheet_temperature.row_values(i))
+		for i in range(0, length_temperature_low):
+			self.__list_temperature_low.append(sheet_temperature_low.row_values(i))
 
-		for i in range(0, length_humidity):
-			self._list_humidity.append(sheet_humidity.row_values(i))
+		for i in range(0, length_temperature_high):
+			self.__list_temperature_high.append(sheet_temperature_high.row_values(i))
 
 		return length_date
 
 
 	def createPic(self):
-		self._createList()
+		self.__createList()
 		date = []
-		temperature = []
-		humidity = []
+		temperature_low = []
+		temperature_high = []
 
-		for i in range(0, len(self._list_date)):
-			date.append(self._list_date[i][0])
-			temperature.append(self._list_temperature[i][0])
-			humidity.append(self._list_humidity[i][0])
+		for i in range(0, len(self.__list_date)):
+			date.append(self.__list_date[i][0])
+			temperature_low.append(self.__list_temperature_low[i][0])
+			temperature_high.append(self.__list_temperature_high[i][0])
 
 		plt.xlabel('Date')
+		plt.ylabel('Temperature')
 
+		#   添加日期与温度关系
+		plt.plot(date, temperature_low, color='b', label='temperature_low')
+		plt.plot(date, temperature_high, color='r', label='temperature_high')
 
-		plt.plot(date, temperature, color='b', label='Temperature')  #   添加日期与温度关系
-		plt.plot(date, humidity, color='r', label='Humidity')     #   添加日期与湿度关系
 		plt.legend(loc='upper left')
 		plt.show()
 

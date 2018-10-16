@@ -13,11 +13,11 @@ class Weather(object):
 		assert start_time < 2400, \
 			'must set a time before 24:00'
 
-		self._phone_number = phone_number
-		self._start_time = start_time
+		self.__phone_number = phone_number
+		self.__start_time = start_time
 
 
-	def _getInfo(self):
+	def __getInfo(self):
 
 		# 设置心知天气的apikey
 		# 并构造请求URL
@@ -31,63 +31,41 @@ class Weather(object):
 
 		info = 'Good morning Bee!\n' + "Temperature in Xi'an: " + weather[0]['low'] + '-' + weather[0]['high']
 
-		total = [info, weather[0]['high'], weather[0]['low']]
+		total = [info, weather[0]['low'], weather[0]['high']]
 
 		return total
-	'''
-	# 输入city_id，发送请求
-	def _getInfo(self):
-
-		r = requests.get('http://www.weather.com.cn/data/sk/' + str(self._city_id) + '.html')
-		r.encoding = 'utf-8'  # 编码
-
-		# r.json()['weatherinfo']['city']
-
-		temperature = r.json()['weatherinfo']['temp']
-		humidity = r.json()['weatherinfo']['SD']
-		list = ["Weather in Xi'an:", "Temperature:  " + temperature,
-		        "Humidity:  " + humidity]
-
-		data = str(list[0] + '\n' + list[1] + '\n' + list[2])
-		info = 'Good morning Bee!\n' + data
-
-
-		total = [info, temperature, humidity.split('%')[0]]
-
-		return total
-	'''
 
 
 	# 发送短信
-	def _send(self):
-		self._setTime()
+	def __send(self):
+		self.__setTime()
 
 		account_sid = 'AC7c4003f4b37c35d2e4249984df784b69'
 		auth_token = '6345546fae4ad92e602570250760c0fe'
 		client = Client(account_sid, auth_token)
 
 		message = client.messages.create(
-			body = self._getInfo()[0],
+			body = self.__getInfo()[0],
 			from_ = '(239) 237-3586',
-			to = self._phone_number
+			to = self.__phone_number
 		)
 
-		info = SetData(self._getInfo()[1], self._getInfo()[2])
-		print(self._getInfo()[0])
+		info = SetData(self.__getInfo()[1], self.__getInfo()[2])
+		print(self.__getInfo()[0])
 		info.write()
 		x = Analyse('/Python/Code/data.xls')
 		x.createPic()
-		time.sleep(70)
+		time.sleep(23 * 60 * 60)
 
 		#print(message.sid)
 
 
 	def start(self):
 		while(True):
-			self._send()
+			self.__send()
 
 	# 设置获取时间
-	def _setTime(self):
+	def __setTime(self):
 
 		# 获取当前小时与分钟
 		now = str(datetime.datetime.now().strftime('%H') + datetime.datetime.now().strftime('%M'))
@@ -98,7 +76,7 @@ class Weather(object):
 		print('Program not starting yet...')
 
 		# 比较设定时间与当前时间
-		while cur != self._start_time:
+		while cur != self.__start_time:
 			now = str(datetime.datetime.now().strftime('%H') + datetime.datetime.now().strftime('%M'))
 			cur = int(now)
 			time.sleep(1)
