@@ -32,6 +32,7 @@ class Analyse(object):
 
 		return length_date
 
+
 	def createPic(self):
 		self._createList()
 		date = []

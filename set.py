@@ -80,6 +80,8 @@ class SetData(object):
 
 		return length
 
+
+	#   检查excel长度是否一致
 	def _lengthCheck(self):
 		path = path = '/Python/Code/data.xls'
 		data = xlrd.open_workbook(path)
