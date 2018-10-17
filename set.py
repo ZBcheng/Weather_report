@@ -60,6 +60,7 @@ class SetData(object):
 		worksheet_temperature_high.write(i, 0, self.__temperature_high)
 		workbook.save('data.xls')
 
+	#   获取当前日期
 	def __getTime(self):
 		raw_day = str(datetime.datetime.now().strftime('%D')).split('/')
 		day = int(raw_day[1])
@@ -97,4 +98,5 @@ class SetData(object):
 
 		if length_date == length_temperature_low == length_temperature_high:
 			return True
-		else: return False
+		else:
+			return False
