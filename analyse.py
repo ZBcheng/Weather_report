@@ -1,4 +1,5 @@
 import xlrd
+import numpy as np
 import matplotlib.pyplot as plt
 
 class Analyse(object):
@@ -38,11 +39,13 @@ class Analyse(object):
 		date = []
 		temperature_low = []
 		temperature_high = []
+		temperature_average = []
 
 		for i in range(0, len(self.__list_date)):
 			date.append(self.__list_date[i][0])
 			temperature_low.append(self.__list_temperature_low[i][0])
 			temperature_high.append(self.__list_temperature_high[i][0])
+			temperature_average.append((temperature_high[i] + temperature_low[i]) / 2)
 
 		plt.xlabel('Date')
 		plt.ylabel('Temperature')
@@ -50,7 +53,6 @@ class Analyse(object):
 		#   添加日期与温度关系
 		plt.plot(date, temperature_low, color='b', label='temperature_low')
 		plt.plot(date, temperature_high, color='r', label='temperature_high')
-
-		plt.legend(loc='upper left')
+		plt.plot(date, temperature_average, color='purple', label='temperature_average')
+		plt.legend(loc='upper right')
 		plt.show()
-

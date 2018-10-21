@@ -45,25 +45,25 @@ class SetData(object):
 		workbook.save('data.xls')
 
 		for j in range(0, len(date)):
-			worksheet_date.write(j, 0, date[j])
+			worksheet_date.write(j, 0, float(date[j]))
 
-		worksheet_date.write(i, 0, self.__getTime())
+		worksheet_date.write(i, 0, float(self.__getTime()))
 
 		for j in range(0, len(temperature_low)):
-			worksheet_temperature_low.write(j, 0, temperature_low[j])
+			worksheet_temperature_low.write(j, 0, float(temperature_low[j]))
 
-		worksheet_temperature_low.write(i, 0, self.__temperature_low)
+		worksheet_temperature_low.write(i, 0, float(self.__temperature_low))
 
 		for j in range(0, len(temperature_high)):
-			worksheet_temperature_high.write(j, 0, temperature_high[j])
+			worksheet_temperature_high.write(j, 0, float(temperature_high[j]))
 
-		worksheet_temperature_high.write(i, 0, self.__temperature_high)
+		worksheet_temperature_high.write(i, 0, float(self.__temperature_high))
 		workbook.save('data.xls')
 
 	#   获取当前日期
 	def __getTime(self):
 		raw_day = str(datetime.datetime.now().strftime('%D')).split('/')
-		day = int(raw_day[1])
+		day = float(raw_day[0]) + 0.01 * float(raw_day[1])
 
 		return day
 

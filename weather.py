@@ -39,6 +39,8 @@ class Weather(object):
 
 	# 发送短信
 	def __send(self):
+
+
 		self.__setTime()
 
 		account_sid = 'AC7c4003f4b37c35d2e4249984df784b69'
@@ -54,6 +56,7 @@ class Weather(object):
 		info = SetData(self.__getInfo()[1], self.__getInfo()[2])
 		print(self.__getInfo()[0])
 		info.write()
+
 		x = Analyse('/Python/Code/data.xls')
 		x.createPic()
 		time.sleep(23 * 60 * 60)
